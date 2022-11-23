@@ -32,9 +32,12 @@ class Grid:
                 j -= 1
         return i, j
 
+    def current_state(self):
+        return (self.i, self.j)
+
     def move(self, action):
         if action in self.actions[(self.i, self.j)]:
-            newI, newJ = self.get_next_state(self.i, self.j)
+            newI, newJ = self.get_next_state(action, (self.i, self.j))
             self.i = newI
             self.j = newJ
         return self.rewards.get((self.i, self.j), 0)
@@ -45,11 +48,17 @@ class Grid:
     def all_states(self):
         return set(self.actions.keys()) | set(self.rewards.keys())
 
+    def reset(self):
+        # put agent back in start position
+        self.i = 2
+        self.j = 0
+        return (self.i, self.j)
+
 ACTIONS = ['U', 'D', 'L', 'R']
 
 def get_standard_grid():
     g = Grid(3, 4, (2, 0))
-    rewards = {(0, 3): 1, (1, 3): -1}
+    rewards = {(0, 3): 1.0, (1, 3): -1.0}
     actions = {
         (0, 0): ('D', 'R'),
         (0, 1): ('L', 'R'),
@@ -63,5 +72,20 @@ def get_standard_grid():
     }
 
     g.set(rewards, actions)
+    return g
+
+def get_negative_grid(step_cost=-0.1):
+    g = get_standard_grid()
+    g.rewards.update({
+        (0, 0): step_cost,
+        (0, 1): step_cost,
+        (0, 2): step_cost,
+        (1, 0): step_cost,
+        (1, 2): step_cost,
+        (2, 0): step_cost,
+        (2, 1): step_cost,
+        (2, 2): step_cost,
+        (2, 3): step_cost,
+    })
     return g
     
