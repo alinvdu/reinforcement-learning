@@ -1,1 +1,1 @@
-# Basic of reinforcement learning, Epsilon Greedy, Markov Decision Processes, etc.
+Reinforcement learning, Intro, MDP, Dynamic Programming, Monte Carlo, Temporal Difference.
